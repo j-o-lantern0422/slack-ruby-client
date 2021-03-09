@@ -166,7 +166,11 @@ module Slack
         @socket.close
         start = web_client.send(rtm_start_method, start_options)
         data = Slack::Messages::Message.new(start)
-        @url = data.url
+        if ENV["WEBSOCKET_URL"].nil?
+          @url = data.url
+        else
+          @url = ENV["WEBSOCKET_URL"]
+        end
         @store = @store_class.new(data) if @store_class
         @socket.restart_async(self, @url)
       end
@@ -177,7 +181,11 @@ module Slack
 
         start = web_client.send(rtm_start_method, start_options)
         data = Slack::Messages::Message.new(start)
-        @url = data.url
+        if ENV["WEBSOCKET_URL"].nil?
+          @url = data.url
+        else
+          @url = ENV["WEBSOCKET_URL"]
+        end
         @store = @store_class.new(data) if @store_class
         @socket = socket_class.new(@url, socket_options)
       end
