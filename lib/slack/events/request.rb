@@ -60,6 +60,10 @@ module Slack
 
       # Validates the request signature and its expiration.
       def verify!
+        if ENV["SOCKET_MODE"]
+          return true
+        end
+
         raise TimestampExpired if expired?
         raise InvalidSignature unless valid?
 
